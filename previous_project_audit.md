@@ -111,6 +111,19 @@ This audit highlights areas of improvement and defines the design principles tha
 
 ---
 
+## 7️⃣ Response models and Request Bodies are not pydantic models
+
+- The request bodies and response models were not pydantic models.
+- They are normal default python classes.
+- As a result they had limited or no validation.
+
+### Improvement Needed 
+
+- Response models and request models should be pydantic models.
+- They should be normal python classes or SQLModel base classes.
+
+---
+
 # 🧠 Core Lessons Learned
 
 ## Lesson 1: Working Code ≠ Good Architecture
