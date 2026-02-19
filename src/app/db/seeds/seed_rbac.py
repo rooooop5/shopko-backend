@@ -1,23 +1,6 @@
-from sqlmodel import SQLModel, Session, Field
+from sqlmodel import Session,select
+from app.models.rbac_models import Permissions, PermissionsEnum, Roles, RolesEnum,RolePermissions,role_permissions_mapping
 from sqlalchemy.exc import IntegrityError
-from typing import Annotated,List
-from enum import Enum
-
-
-class PermissionsEnum(Enum):
-    viewProducts = "view_products"
-    listProducts = "list_products"
-    getProduct = "get_product"
-    placeOrder = "place_order"
-    cancelOrder = "cancel_order"
-    listOwnOrders = "list_own_orders"
-    viewOwnOrder = "view_own_order"
-
-
-
-class Permissions(SQLModel, table=True):
-    id: Annotated[int, Field(primary_key=True)]
-    permission: Annotated[str, Field(unique=True)]
 
 
 def seed_permissions(session: Session):
@@ -26,5 +9,28 @@ def seed_permissions(session: Session):
         try:
             session.add(permission_instance)
             session.commit()
+        except IntegrityError:
+            session.rollback()
+
+
+def seed_roles(session: Session):
+
+    for roles in RolesEnum:
+        try:
+            role_instance = Roles(role=roles.value)
+            session.add(role_instance)
+            session.commit()
+        except IntegrityError:
+            session.rollback()
+
+def seed_roles_permissions(session:Session):
+    for role in role_permissions_mapping:
+        try:
+            db_role=session.exec(select(Roles).where(Roles.role==role.value)).first()
+            for permission in role_permissions_mapping[role]:
+                db_permission=session.exec(select(Permissions).where(Permissions.permission==permission.value)).first()
+                role_permission_instance=RolePermissions(role=db_role.id,permission=db_permission.id)
+                session.add(role_permission_instance)
+                session.commit()
         except IntegrityError:
             session.rollback()

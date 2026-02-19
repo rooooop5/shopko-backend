@@ -11,6 +11,4 @@ engine = create_engine(url)
 
 
 def create_tables():
-    print(os.getcwd())
-    print(os.getenv("DATABASE_URL"))
     SQLModel.metadata.create_all(engine)
