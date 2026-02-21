@@ -1,0 +1,11 @@
+from passlib.context import CryptContext
+
+crypt_context = CryptContext(schemes=["argon2"], deprecated="auto")
+
+
+def hash_password(password: str):
+    return crypt_context.hash(secret=password)
+
+
+def verify_password(password: str, hashed_password: str):
+    return crypt_context.verify(secret=password, hash=hashed_password)
