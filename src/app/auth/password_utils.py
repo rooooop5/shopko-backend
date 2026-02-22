@@ -1,6 +1,7 @@
 from passlib.context import CryptContext
+from src.env_utils import Settings
 
-crypt_context = CryptContext(schemes=["argon2"], deprecated="auto")
+crypt_context = CryptContext(schemes=[Settings.HASHING_ALGORITHM], deprecated="auto")
 
 
 def hash_password(password: str):
