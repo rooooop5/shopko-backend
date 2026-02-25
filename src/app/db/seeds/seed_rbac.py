@@ -25,12 +25,12 @@ def seed_roles(session: Session):
 
 def seed_roles_permissions(session:Session):
     for role in role_permissions_mapping:
-        try:
-            db_role=session.exec(select(Roles).where(Roles.role==role.value)).first()
-            for permission in role_permissions_mapping[role]:
-                db_permission=session.exec(select(Permissions).where(Permissions.permission==permission.value)).first()
-                role_permission_instance=RolePermissions(role=db_role.id,permission=db_permission.id)
+        db_role=session.exec(select(Roles).where(Roles.role==role.value)).first()
+        for permission in role_permissions_mapping[role]:
+            db_permission=session.exec(select(Permissions).where(Permissions.permission==permission.value)).first()
+            role_permission_instance=RolePermissions(role=db_role.id,permission=db_permission.id)
+            try:
                 session.add(role_permission_instance)
                 session.commit()
-        except IntegrityError:
-            session.rollback()
+            except IntegrityError:
+                session.rollback()

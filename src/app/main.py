@@ -1,10 +1,10 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from app.db.startup import initialise_database
+from app.db.startup import startup
 from app.router.auth_router import auth_router
 @asynccontextmanager
 async def life(app:FastAPI):
-    initialise_database()
+    startup()
     yield
     print("Shutting down api.\n")
 
