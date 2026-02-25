@@ -1,10 +1,11 @@
 import jwt
+from jwt.exceptions import InvalidTokenError,InvalidSubjectError
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import Session
 from pydantic import BaseModel
 from app.db.seeds.seed_tables import engine
-from src.env_utils import Settings
+from app.env_utils import Settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
@@ -22,10 +23,12 @@ def create_access_token(data: dict):
 
 def authenticate_user(session: Session, token=Depends(oauth2_scheme)):
     try:
-        decoded = jwt.decode(token, Settings.SECRET_KEY, Settings.ALGORITHM)
-    except:
-        print("Unauthorized.\n")
+        payload= jwt.decode(token, Settings.SECRET_KEY, Settings.ALGORITHM)
+        sub=payload.get("sub")
+        if not sub:
+            raise InvalidSubjectError
+            
+    except InvalidTokenError:
+        raise InvalidTokenError
 
 
-with Session(engine) as session:
-    authenticate_user(session)

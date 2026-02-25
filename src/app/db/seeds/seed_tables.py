@@ -2,7 +2,7 @@ import os
 from sqlmodel import SQLModel, create_engine
 from dotenv import load_dotenv
 
-load_dotenv(".env")
+load_dotenv()
 # -----url of the database from the .env------
 url = os.getenv("DATABASE_URL")
 
