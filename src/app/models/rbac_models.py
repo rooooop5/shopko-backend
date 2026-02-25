@@ -1,6 +1,10 @@
 from enum import Enum
 from sqlmodel import SQLModel, Field, Relationship
-from typing import Annotated
+from typing import Annotated, TYPE_CHECKING
+from app.models.user_models import UsersRoles
+
+if TYPE_CHECKING:
+    from app.models.user_models import Users
 
 
 class RolesEnum(str, Enum):
@@ -71,3 +75,4 @@ class Roles(SQLModel, table=True):
     id: Annotated[int, Field(primary_key=True)]
     role: Annotated[str, Field(unique=True)]
     permissions: list["Permissions"] = Relationship(back_populates="roles", link_model=RolePermissions)
+    users: list["Users"] = Relationship(back_populates="roles", link_model=UsersRoles)

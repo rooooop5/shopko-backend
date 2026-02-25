@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import Session
 from pydantic import BaseModel
 from app.db.seeds.seed_tables import engine
-from app.env_utils import Settings
+from app.auth.settings import Settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
@@ -20,6 +20,8 @@ def create_access_token(data: dict):
     token = jwt.encode(payload=to_encode, key=Settings.SECRET_KEY, algorithm=Settings.ALGORITHM)
     return token
 
+def verify_login_request():
+    pass
 
 def authenticate_user(session: Session, token=Depends(oauth2_scheme)):
     try:
