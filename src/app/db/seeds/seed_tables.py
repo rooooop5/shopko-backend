@@ -1,5 +1,5 @@
 import os
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import SQLModel, create_engine, Session
 from app.auth.settings import Settings
 
 # -----url of the database from the .env through the Settings object------
@@ -11,3 +11,8 @@ engine = create_engine(url)
 
 def create_tables():
     SQLModel.metadata.create_all(engine)
+
+
+def get_session():
+    with Session(engine) as session:
+        yield session

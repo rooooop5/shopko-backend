@@ -1,5 +1,5 @@
 import jwt
-from jwt.exceptions import InvalidTokenError,InvalidSubjectError
+from jwt.exceptions import InvalidTokenError, InvalidSubjectError
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import Session
@@ -20,17 +20,17 @@ def create_access_token(data: dict):
     token = jwt.encode(payload=to_encode, key=Settings.SECRET_KEY, algorithm=Settings.ALGORITHM)
     return token
 
+
 def verify_login_request():
     pass
 
+
 def authenticate_user(session: Session, token=Depends(oauth2_scheme)):
     try:
-        payload= jwt.decode(token, Settings.SECRET_KEY, Settings.ALGORITHM)
-        sub=payload.get("sub")
+        payload = jwt.decode(token, Settings.SECRET_KEY, Settings.ALGORITHM)
+        sub = payload.get("sub")
         if not sub:
             raise InvalidSubjectError
-            
+
     except InvalidTokenError:
         raise InvalidTokenError
-
-

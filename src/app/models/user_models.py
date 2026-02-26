@@ -11,14 +11,15 @@ class UsersRoles(SQLModel, table=True):
 
 
 class UserBase(SQLModel):
-    username: str
+    username: Annotated[str, Field(unique=True, index=True)]
     password: str
-    active_role: int
+    active_role: int | None
 
 
 class Users(UserBase, table=True):
     id: Annotated[int, Field(primary_key=True)]
     roles: List["Roles"] = Relationship(back_populates="users", link_model=UsersRoles)
+
 
 class UserRegister(UserBase):
     pass
