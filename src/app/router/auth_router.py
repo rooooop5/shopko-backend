@@ -1,9 +1,10 @@
-from fastapi import APIRouter
-from fastapi import Depends
-from sqlmodel import Session
+from fastapi import APIRouter,Depends
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlmodel import Session,select
 from app.db.seeds.seed_tables import get_session
 from app.auth.security import create_access_token, authenticate_user
-from app.models.user_models import UserRegister,UserLogin
+from app.models.user_models import UserRegister,UserLogin,UserResponse,Users
+from app.models.enums import RolesEnum
 from app.endpoints.auth_endpoints import login_endpoint, register_endpoint
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
@@ -19,5 +20,9 @@ def register(user: UserRegister, session: Session = Depends(get_session)):
     return register_endpoint(user=user, session=session)
 
 @auth_router.post("/token")
-def login(user:UserLogin,session:Session=Depends(get_session)):
+def login(user:OAuth2PasswordRequestForm=Depends(OAuth2PasswordRequestForm),session:Session=Depends(get_session)):
+    pass
+
+@auth_router.post("/select-role")
+def set_role(role:RolesEnum):
     pass

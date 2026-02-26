@@ -12,10 +12,9 @@ class UsersRoles(SQLModel, table=True):
 
 
 class UserBase(SQLModel):
-    username: Annotated[str,Field(unique=True,index=True)]
-    email:Annotated[str,Field(unique=True,regex=f"@gmail\.com$")]
+    username: Annotated[str, Field(unique=True, index=True)]
+    email: Annotated[str, Field(unique=True, regex=f"@gmail\.com$")]
     password: str
-
 
 
 class Users(UserBase, table=True):
@@ -30,5 +29,7 @@ class UserRegister(UserBase):
 class UserLogin(UserBase):
     active_role: RolesEnum
 
-class UserResponse(UserBase):
-    pass
+
+class UserResponse(SQLModel):
+    username: str
+    email: str

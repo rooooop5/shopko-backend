@@ -3,11 +3,11 @@ from sqlalchemy.exc import IntegrityError
 from fastapi import status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
-from app.models.user_models import UserRegister,UserLogin, Users
+from app.models.user_models import UserRegister, UserLogin, UserResponse, Users
 from app.auth.password_utils import hash_password, verify_password
 
 
-def login_endpoint(user:UserLogin,session:Session):
+def login_endpoint(user: UserLogin, session: Session):
     pass
 
 
@@ -20,4 +20,5 @@ def register_endpoint(user: UserRegister, session: Session):
     except IntegrityError:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User already exists.")
     session.refresh(db_user)
-    return JSONResponse(content={"user_details":db_user.model_dump()})
+    response = UserResponse(**db_user.model_dump())
+    return JSONResponse(content={"user_details": response.model_dump()})
