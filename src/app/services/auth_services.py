@@ -4,9 +4,10 @@ from fastapi import status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-from app.models.user_models import UserRegister, UserLogin, UserCreatedResponse,UserLoggedInResponse, Users,UsersRoles
-from app.models.exceptions import credentials_exception,user_already_exists_exception
-from app.models.enums import RolesEnum
+from app.schemas.user_schemas import UserRegister, UserLogin, UserCreatedResponse,UserLoggedInResponse
+from app.models.user_models import Users,UsersRoles
+from app.core.exceptions import credentials_exception,user_already_exists_exception
+from app.core.enums import RolesEnum
 from app.models.rbac_models import Roles
 from app.auth.password_utils import hash_password, verify_password
 

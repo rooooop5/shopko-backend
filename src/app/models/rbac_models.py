@@ -2,7 +2,7 @@ from enum import Enum
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Annotated, TYPE_CHECKING
 from app.models.user_models import UsersRoles
-from app.models.enums import RolesEnum, PermissionsEnum
+from app.core.enums import RolesEnum, PermissionsEnum
 
 if TYPE_CHECKING:
     from app.models.user_models import Users
@@ -13,35 +13,7 @@ class RolePermissions(SQLModel, table=True):
     permission: Annotated[int, Field(foreign_key="permissions.id", primary_key=True)]
 
 
-role_permissions_mapping = {
-    RolesEnum.MODERATOR: [
-        PermissionsEnum.viewProducts,
-        PermissionsEnum.getProduct,
-        PermissionsEnum.viewSeller,
-        PermissionsEnum.removeSeller,
-        PermissionsEnum.viewCustomer,
-        PermissionsEnum.removeCustomer,
-        PermissionsEnum.removeProduct,
-    ],
-    RolesEnum.CUSTOMER: [
-        PermissionsEnum.viewProducts,
-        PermissionsEnum.getProduct,
-        PermissionsEnum.placeOrder,
-        PermissionsEnum.viewOrder,
-        PermissionsEnum.listOrders,
-        PermissionsEnum.cancelOrder,
-    ],
-    RolesEnum.SELLER: [
-        PermissionsEnum.viewProducts,
-        PermissionsEnum.listProduct,
-        PermissionsEnum.getProduct,
-        PermissionsEnum.viewOrder,
-        PermissionsEnum.listOrders,
-        PermissionsEnum.cancelOrder,
-        PermissionsEnum.updateProduct,
-        PermissionsEnum.removeProduct,
-    ],
-}
+
 
 
 class Permissions(SQLModel, table=True):
