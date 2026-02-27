@@ -12,6 +12,8 @@ engine = create_engine(url)
 def create_tables():
     SQLModel.metadata.create_all(engine)
 
+def delete_tables():
+    SQLModel.metadata.drop_all(bind=engine)
 
 def get_session():
     with Session(engine) as session:

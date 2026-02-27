@@ -27,9 +27,12 @@ class UserRegister(UserBase):
 
 
 class UserLogin(UserBase):
-    active_role: RolesEnum
+    pass
 
 
-class UserResponse(SQLModel):
+class UserCreatedResponse(SQLModel):
     username: str
     email: str
+
+class UserLoggedInResponse(UserCreatedResponse):
+    roles:List[RolesEnum]

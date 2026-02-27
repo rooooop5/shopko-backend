@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
 from fastapi import Request
-from app.db.startup import startup
+from app.db.startup import startup,cleanup
 from app.router.auth_router import auth_router
 
 
@@ -11,7 +11,7 @@ from app.router.auth_router import auth_router
 async def life(app: FastAPI):
     startup()
     yield
-    print("Shutting down api.\n")
+    cleanup()
 
 
 app = FastAPI(lifespan=life)
@@ -27,5 +27,5 @@ def http_exception_handler(request: Request, exception: HTTPException):
         content={
             "exception": {"status_code": exception.status_code, "detail": exception.detail},
             "path": request.url.path,
-        },
+        }
     )

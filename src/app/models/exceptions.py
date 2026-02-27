@@ -1,0 +1,6 @@
+from fastapi.exceptions import HTTPException
+from fastapi import status
+
+bad_request_exception = HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="bad request")
+credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="unauthorized")
+user_already_exists_exception = HTTPException(status_code=status.HTTP_409_CONFLICT, detail="user already exists")
