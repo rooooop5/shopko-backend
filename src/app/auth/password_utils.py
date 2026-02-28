@@ -1,5 +1,5 @@
 from passlib.context import CryptContext
-from app.auth.security import Settings
+from app.auth.settings import Settings
 
 crypt_context = CryptContext(schemes=[Settings.HASHING_ALGORITHM], deprecated="auto")
 

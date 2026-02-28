@@ -1,25 +1,23 @@
 from sqlmodel import Session,select
 from sqlalchemy.exc import IntegrityError
-from fastapi import status
 from fastapi.responses import JSONResponse
-from fastapi.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from app.schemas.user_schemas import UserRegister, UserLogin, UserCreatedResponse,UserLoggedInResponse
 from app.models.user_models import Users,UsersRoles
 from app.core.exceptions import credentials_exception,user_already_exists_exception
 from app.core.enums import RolesEnum
 from app.models.rbac_models import Roles
-from app.auth.password_utils import hash_password, verify_password
+from app.auth.password_utils import hash_password
+from app.auth.security import create_access_token,authenticate_user,verify_login_request,Token
 
 
 def login_endpoint(user:OAuth2PasswordRequestForm, session: Session):
-    try:
-        query=select(Users).where(Users.username==user.username)
-        db_user=session.exec(query).one()
-    except:
-        raise credentials_exception
-    if not verify_password(user.password,db_user.password):
-        raise credentials_exception
+    db_user:Users=verify_login_request(user=user,session=session)
+    access_token=create_access_token(data={"sub":db_user.username})
+    return Token(access_token=access_token,token_type="Bearer")
+    
+
+def me(db_user:Users):
     roles=[item.role for item in db_user.roles ]
     response={"username":db_user.username,"email":db_user.email,"roles":roles}
     return UserLoggedInResponse.model_validate(response)
