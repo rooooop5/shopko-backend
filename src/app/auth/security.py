@@ -8,10 +8,9 @@ from sqlalchemy.exc import NoResultFound
 from pydantic import BaseModel
 from app.models.user_models import Users
 from app.auth.settings import Settings
-from app.core.exceptions import credentials_exception,user_does_not_exist_exception
+from app.core.exceptions import credentials_exception, user_does_not_exist_exception
 from app.db.seeds.seed_tables import get_session
 from app.auth.password_utils import verify_password
-
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
@@ -39,17 +38,17 @@ def verify_login_request(user: OAuth2PasswordRequestForm, session: Session):
     return db_user
 
 
-def authenticate_user(token=Depends(oauth2_scheme),session:Session=Depends(get_session)):
+def authenticate_user(token=Depends(oauth2_scheme), session: Session = Depends(get_session)):
     try:
-        payload = jwt.decode(jwt=token,key=Settings.SECRET_KEY, algorithms=[Settings.ALGORITHM])
+        payload = jwt.decode(jwt=token, key=Settings.SECRET_KEY, algorithms=[Settings.ALGORITHM])
         username = payload.get("sub")
         if not username:
             raise credentials_exception
     except InvalidTokenError:
         raise credentials_exception
     try:
-        query=select(Users).where(Users.username==username)
-        db_user=session.exec(query).one()
+        query = select(Users).where(Users.username == username)
+        db_user = session.exec(query).one()
     except NoResultFound:
         raise user_does_not_exist_exception
     return db_user

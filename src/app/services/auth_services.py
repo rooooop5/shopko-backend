@@ -2,19 +2,19 @@ from sqlmodel import Session,select
 from sqlalchemy.exc import IntegrityError
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
-from app.schemas.user_schemas import UserRegister, UserLogin, UserCreatedResponse,UserLoggedInResponse
+from app.schemas.user_schemas import UserRegister, UserCreatedResponse,UserLoggedInResponse
 from app.models.user_models import Users,UsersRoles
-from app.core.exceptions import credentials_exception,user_already_exists_exception
+from app.core.exceptions import user_already_exists_exception
 from app.core.enums import RolesEnum
 from app.models.rbac_models import Roles
 from app.auth.password_utils import hash_password
-from app.auth.security import create_access_token,authenticate_user,verify_login_request,Token
+from app.auth.security import create_access_token,verify_login_request,Token
 
 
 def login_endpoint(user:OAuth2PasswordRequestForm, session: Session):
     db_user:Users=verify_login_request(user=user,session=session)
     access_token=create_access_token(data={"sub":db_user.username})
-    return Token(access_token=access_token,token_type="Bearer")
+    return Token(access_token=access_token,token_type="bearer")
     
 
 def me(db_user:Users):

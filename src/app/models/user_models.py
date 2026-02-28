@@ -1,6 +1,5 @@
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Annotated, List, TYPE_CHECKING
-from app.core.enums import RolesEnum
 from app.schemas.user_schemas import UserBase
 
 if TYPE_CHECKING:

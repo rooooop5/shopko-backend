@@ -1,8 +1,6 @@
-from enum import Enum
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Annotated, TYPE_CHECKING
 from app.models.user_models import UsersRoles
-from app.core.enums import RolesEnum, PermissionsEnum
 
 if TYPE_CHECKING:
     from app.models.user_models import Users
@@ -11,9 +9,6 @@ if TYPE_CHECKING:
 class RolePermissions(SQLModel, table=True):
     role: Annotated[int, Field(foreign_key="roles.id", primary_key=True)]
     permission: Annotated[int, Field(foreign_key="permissions.id", primary_key=True)]
-
-
-
 
 
 class Permissions(SQLModel, table=True):
