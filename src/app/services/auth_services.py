@@ -1,10 +1,11 @@
+import json
 from sqlmodel import Session,select
 from sqlalchemy.exc import IntegrityError
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from app.schemas.user_schemas import UserRegister, UserCreatedResponse,UserLoggedInResponse
 from app.models.user_models import Users,UsersRoles
-from app.core.exceptions import user_already_exists_exception
+from app.core.exceptions import user_already_exists_exception,role_not_allowed_exception
 from app.core.enums import RolesEnum
 from app.models.rbac_models import Roles
 from app.auth.password_utils import hash_password
@@ -39,3 +40,12 @@ def register_endpoint(user: UserRegister,roles:list[RolesEnum], session: Session
     session.refresh(db_user)
     response = UserCreatedResponse.model_validate(db_user)
     return JSONResponse(content={"user_details": response.model_dump()})
+
+def set_role(db_user:Users,role):
+    permissable_roles=[items.role for items in db_user.roles]
+    if role in permissable_roles:
+        role_access_token=create_access_token(data={"sub":db_user.username,"role":role})
+        return Token(access_token=role_access_token,token_type="bearer")
+    else:
+        raise role_not_allowed_exception
+    

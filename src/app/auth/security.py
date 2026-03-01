@@ -43,8 +43,10 @@ def authenticate_user(token=Depends(oauth2_scheme), session: Session = Depends(g
         payload = jwt.decode(jwt=token, key=Settings.SECRET_KEY, algorithms=[Settings.ALGORITHM])
         username = payload.get("sub")
         if not username:
+            print("NO username")
             raise credentials_exception
     except InvalidTokenError:
+        print("Invalid Token")
         raise credentials_exception
     try:
         query = select(Users).where(Users.username == username)
@@ -52,3 +54,19 @@ def authenticate_user(token=Depends(oauth2_scheme), session: Session = Depends(g
     except NoResultFound:
         raise user_does_not_exist_exception
     return db_user
+
+def authenticate_role(token=Depends(oauth2_scheme),session:Session=Depends(get_session)):
+    try:
+        payload=jwt.decode(jwt=token,key=Settings.SECRET_KEY,algorithms=[Settings.ALGORITHM])
+        username=payload.get("sub")
+        if not username:
+            print("No username")
+            raise credentials_exception
+        role=payload.get("role")
+        if not role:
+            print("No role in jwt")
+            raise credentials_exception
+    except InvalidTokenError:
+        print("invalid jwwt")
+        raise credentials_exception
+    return {"active_role":role}
