@@ -1,13 +1,21 @@
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.exc import IntegrityError
 from fastapi.requests import Request
-from exception_handlers.database_exception_handler.database_exceptions import database_error
+from fastapi.responses import JSONResponse
+from exception_handlers.database_exception_handler.database_exceptions import database_errors
 
-def IntegrityErrorHandler(request:Request,exception:IntegrityError):
-    exception_string=str(exception.orig)
-    print(exception_string)
-    for error,http_exception in database_error.items():
-        if error in exception_string:
-            raise http_exception
+
+def IntegrityErrorHandler(request: Request, db_exception: IntegrityError):
+    db_error=classify_integrity_error(exception=db_exception)
+    return json_response(db_error,request)
     
-        
+
+def classify_integrity_error(exception:IntegrityError):
+    exception_string=str(exception.orig)
+    for db_error in database_errors.keys():
+        if db_error in exception_string:
+            return db_error
+
+def json_response(db_error:str,request:Request):
+    exception=database_errors.get(db_error)
+    exception["path"]=request.url.path
+    return JSONResponse(status_code=exception.get("status_code"),content=exception)

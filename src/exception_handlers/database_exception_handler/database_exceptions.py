@@ -1,6 +1,7 @@
-from exception_handlers.http_exception_handler.http_exceptions import (
-    email_already_taken_exception,
-    user_already_exists_exception
-)
+from fastapi import status
 
-database_error = {"ix_users_username": user_already_exists_exception, "user_email_key": email_already_taken_exception}
+
+database_errors = {
+    "ix_users_username": {"status_code": status.HTTP_409_CONFLICT, "detail": "user already exists"},
+    "users_email_key": {"status_code": status.HTTP_409_CONFLICT, "detail": "email already taken"},
+}
