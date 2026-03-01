@@ -1,5 +1,5 @@
 from app.core.enums import RolesEnum, PermissionsEnum
-
+from pydantic import BaseModel
 role_permissions_mapping = {
     RolesEnum.MODERATOR: [
         PermissionsEnum.viewProducts,
@@ -29,3 +29,6 @@ role_permissions_mapping = {
         PermissionsEnum.removeProduct,
     ]
 }
+
+class ActiveRoleResponse(BaseModel):
+    active_role:RolesEnum

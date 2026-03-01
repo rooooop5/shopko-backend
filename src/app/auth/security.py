@@ -7,6 +7,7 @@ from sqlmodel import Session, select
 from sqlalchemy.exc import NoResultFound
 from pydantic import BaseModel
 from app.models.user_models import Users
+from app.schemas.rbac_schemas import ActiveRoleResponse
 from app.auth.settings import Settings
 from app.core.exceptions import credentials_exception, user_does_not_exist_exception
 from app.db.seeds.seed_tables import get_session
@@ -55,7 +56,7 @@ def authenticate_user(token=Depends(oauth2_scheme), session: Session = Depends(g
         raise user_does_not_exist_exception
     return db_user
 
-def authenticate_role(token=Depends(oauth2_scheme),session:Session=Depends(get_session)):
+def authenticate_role(token=Depends(oauth2_scheme)):
     try:
         payload=jwt.decode(jwt=token,key=Settings.SECRET_KEY,algorithms=[Settings.ALGORITHM])
         username=payload.get("sub")
@@ -69,4 +70,4 @@ def authenticate_role(token=Depends(oauth2_scheme),session:Session=Depends(get_s
     except InvalidTokenError:
         print("invalid jwwt")
         raise credentials_exception
-    return {"active_role":role}
+    return ActiveRoleResponse.model_validate({"active_role":role})
