@@ -1,4 +1,4 @@
-from app.core.enums import RolesEnum, PermissionsEnum
+from core.enums import RolesEnum, PermissionsEnum
 from pydantic import BaseModel
 role_permissions_mapping = {
     RolesEnum.MODERATOR: [

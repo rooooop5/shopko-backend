@@ -1,9 +1,9 @@
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Annotated, TYPE_CHECKING
-from app.models.user_models import UsersRoles
+from db.models.user_models import UsersRoles
 
 if TYPE_CHECKING:
-    from app.models.user_models import Users
+    from db.models.user_models import Users
 
 
 class RolePermissions(SQLModel, table=True):

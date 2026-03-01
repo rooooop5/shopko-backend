@@ -1,7 +1,7 @@
 from typing import Annotated, List
 from pydantic import field_validator
 from sqlmodel import SQLModel, Field
-from app.core.enums import RolesEnum
+from core.enums import RolesEnum
 
 
 class UserBase(SQLModel):

@@ -1,10 +1,10 @@
 from sqlmodel import Session, select
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
-from app.schemas.user_schemas import UserRegister, UserCreatedResponse, UserLoggedInResponse
-from app.models.user_models import Users, UsersRoles
-from app.core.enums import RolesEnum
-from app.models.rbac_models import Roles
+from schemas.user_schemas import UserRegister, UserCreatedResponse, UserLoggedInResponse
+from db.models.user_models import Users, UsersRoles
+from core.enums import RolesEnum
+from db.models.rbac_models import Roles
 from app.auth.password_utils import hash_password
 from app.auth.security import create_access_token, verify_login_request, verify_role, Token
 

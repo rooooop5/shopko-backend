@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, create_engine, Session
-from app.auth.settings import Settings
+from settings.settings import Settings
 
 # -----url of the database from the .env through the Settings object------
 url = Settings.DATABASE_URL
