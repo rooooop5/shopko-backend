@@ -1,4 +1,3 @@
-import os
 from sqlmodel import SQLModel, create_engine, Session
 from app.auth.settings import Settings
 

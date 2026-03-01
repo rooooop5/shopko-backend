@@ -3,12 +3,12 @@ from fastapi import APIRouter, Depends, Query
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session
 from typing import List
-from app.db.seeds.seed_tables import get_session
-from app.schemas.user_schemas import UserRegister, UserCreatedResponse, UserLoggedInResponse
-from app.models.user_models import Users
-from app.schemas.rbac_schemas import ActiveRoleResponse
-from app.core.enums import RolesEnum
-from app.services.auth_services import login_endpoint, register_endpoint, me, set_role_endpoint
+from db.seeds.seed_tables import get_session
+from schemas.user_schemas import UserRegister, UserCreatedResponse, UserLoggedInResponse
+from db.models.user_models import Users
+from schemas.rbac_schemas import ActiveRoleResponse
+from core.enums import RolesEnum
+from services.auth_services import login_endpoint, register_endpoint, me, set_role_endpoint
 from app.auth.security import Token, authenticate_user, authenticate_role
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])

@@ -1,7 +1,7 @@
 from sqlmodel import Session, select
-from app.models.rbac_models import Permissions, Roles, RolePermissions
-from app.core.enums import RolesEnum, PermissionsEnum
-from app.schemas.rbac_schemas import role_permissions_mapping
+from db.models.rbac_models import Permissions, Roles, RolePermissions
+from core.enums import RolesEnum, PermissionsEnum
+from schemas.rbac_schemas import role_permissions_mapping
 from sqlalchemy.exc import IntegrityError
 
 
