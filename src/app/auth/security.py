@@ -8,7 +8,12 @@ from pydantic import BaseModel
 from app.models.user_models import Users
 from app.schemas.rbac_schemas import ActiveRoleResponse
 from app.auth.settings import Settings
-from app.core.exceptions import credentials_exception, user_does_not_exist_exception
+from exception_handlers.http_exception_handler.http_exceptions import (
+    credentials_exception,
+    user_does_not_exist_exception,
+    incorrect_password_exception,
+    role_not_allowed_exception,
+)
 from app.db.seeds.seed_tables import get_session
 from app.auth.password_utils import verify_password
 
@@ -32,9 +37,9 @@ def verify_login_request(user: OAuth2PasswordRequestForm, session: Session):
         query = select(Users).where(Users.username == user.username)
         db_user = session.exec(query).one()
     except NoResultFound:
-        raise credentials_exception
+        raise user_does_not_exist_exception
     if not verify_password(user.password, db_user.password):
-        raise credentials_exception
+        raise incorrect_password_exception
     return db_user
 
 
@@ -43,10 +48,8 @@ def authenticate_user(token=Depends(oauth2_scheme), session: Session = Depends(g
         payload = jwt.decode(jwt=token, key=Settings.SECRET_KEY, algorithms=[Settings.ALGORITHM])
         username = payload.get("sub")
         if not username:
-            print("NO username")
             raise credentials_exception
     except InvalidTokenError:
-        print("Invalid Token")
         raise credentials_exception
     try:
         query = select(Users).where(Users.username == username)
@@ -56,18 +59,21 @@ def authenticate_user(token=Depends(oauth2_scheme), session: Session = Depends(g
     return db_user
 
 
+def verify_role(db_user:Users, role):
+    permissable_roles = [items.role for items in db_user.roles]
+    if not role in permissable_roles:
+        raise role_not_allowed_exception
+
+
 def authenticate_role(token=Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(jwt=token, key=Settings.SECRET_KEY, algorithms=[Settings.ALGORITHM])
         username = payload.get("sub")
         if not username:
-            print("No username")
             raise credentials_exception
         role = payload.get("role")
         if not role:
-            print("No role in jwt")
             raise credentials_exception
     except InvalidTokenError:
-        print("invalid jwwt")
         raise credentials_exception
-    return ActiveRoleResponse.model_validate({"active_role": role})
+    return {"active_role": role}
