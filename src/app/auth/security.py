@@ -1,6 +1,5 @@
 import jwt
-from jwt.exceptions import InvalidTokenError, InvalidSubjectError
-from typing import TYPE_CHECKING
+from jwt.exceptions import InvalidTokenError
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlmodel import Session, select
@@ -56,18 +55,19 @@ def authenticate_user(token=Depends(oauth2_scheme), session: Session = Depends(g
         raise user_does_not_exist_exception
     return db_user
 
+
 def authenticate_role(token=Depends(oauth2_scheme)):
     try:
-        payload=jwt.decode(jwt=token,key=Settings.SECRET_KEY,algorithms=[Settings.ALGORITHM])
-        username=payload.get("sub")
+        payload = jwt.decode(jwt=token, key=Settings.SECRET_KEY, algorithms=[Settings.ALGORITHM])
+        username = payload.get("sub")
         if not username:
             print("No username")
             raise credentials_exception
-        role=payload.get("role")
+        role = payload.get("role")
         if not role:
             print("No role in jwt")
             raise credentials_exception
     except InvalidTokenError:
         print("invalid jwwt")
         raise credentials_exception
-    return ActiveRoleResponse.model_validate({"active_role":role})
+    return ActiveRoleResponse.model_validate({"active_role": role})
