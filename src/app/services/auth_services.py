@@ -12,13 +12,13 @@ from app.auth.security import create_access_token, verify_login_request, verify_
 def login_endpoint(user: OAuth2PasswordRequestForm, session: Session):
     db_user: Users = verify_login_request(user=user, session=session)
     access_token = create_access_token(data={"sub": db_user.username})
-    return Token(access_token=access_token, token_type="bearer")
+    return access_token
 
 
 def me(db_user: Users):
     roles = [item.role for item in db_user.roles]
     response = {"username": db_user.username, "email": db_user.email, "roles": roles}
-    return UserLoggedInResponse.model_validate(response)
+    return response
 
 
 def register_endpoint(user: UserRegister, roles: list[RolesEnum], session: Session):
@@ -33,11 +33,11 @@ def register_endpoint(user: UserRegister, roles: list[RolesEnum], session: Sessi
         session.add(db_user_roles)
     session.commit()
     session.refresh(db_user)
-    response = UserCreatedResponse.model_validate(db_user)
-    return JSONResponse(content={"user_details": response.model_dump()})
+    response = {"username": db_user.username, "email": db_user.email}
+    return response
 
 
 def set_role_endpoint(db_user: Users, role):
     verify_role(db_user=db_user, role=role)
     role_access_token = create_access_token(data={"sub": db_user.username, "role": role})
-    return Token(access_token=role_access_token, token_type="bearer")
+    return role_access_token
