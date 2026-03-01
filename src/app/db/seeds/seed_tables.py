@@ -20,3 +20,7 @@ def delete_tables():
 def get_session():
     with Session(engine) as session:
         yield session
+        try:
+            session.commit()
+        except Exception:
+            session.rollback()

@@ -31,7 +31,8 @@ def register_endpoint(user: UserRegister, roles: list[RolesEnum], session: Sessi
         user_role = {"user": db_user.id, "role": role_query.id}
         db_user_roles = UsersRoles.model_validate(user_role)
         session.add(db_user_roles)
-    session.commit()
+    #session.commit()
+    session.flush()
     session.refresh(db_user)
     response = {"username": db_user.username, "email": db_user.email}
     return response
