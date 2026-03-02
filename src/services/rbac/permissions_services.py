@@ -1,5 +1,5 @@
 from sqlmodel import Session, select
-from db.models.rbac_models import RolePermissions, Roles
+from db.models.rbac_models import Roles
 
 
 
