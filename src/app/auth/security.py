@@ -7,7 +7,7 @@ from sqlalchemy.exc import NoResultFound
 from pydantic import BaseModel
 from db.models.user_models import Users
 from settings.settings import Settings
-from exception_handlers.http_exception_handler.http_exceptions import (
+from exception_handlers.http.http_exceptions import (
     credentials_exception,
     user_does_not_exist_exception,
     incorrect_password_exception,

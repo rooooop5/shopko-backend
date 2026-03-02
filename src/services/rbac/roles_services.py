@@ -10,14 +10,16 @@ def get_all_roles(db_user:Users):
        return roles
 
 def create_user_roles(db_user:Users,roles:List[RolesEnum],session:Session):
+    db_user_roles=[]
     for role in roles:
         roles_query = select(Roles).where(Roles.role == role)
         db_roles=session.exec(roles_query).one()
         user_role = {"user": db_user.id, "role": db_roles.id}
-        db_user_roles = UsersRoles.model_validate(user_role)
-        return db_user_roles
+        db_user_role = UsersRoles.model_validate(user_role)
+        db_user_roles.append(db_user_role)
+    return db_user_roles
     
-def set_role_endpoint(db_user: Users, role):
+def set_role(db_user: Users, role):
     verify_role(db_user=db_user, role=role)
     role_access_token = create_access_token(data={"sub": db_user.username, "role": role})
     return role_access_token
