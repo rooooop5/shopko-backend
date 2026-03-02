@@ -8,7 +8,8 @@ from schemas.user_schemas import UserRegister, UserCreatedResponse, UserLoggedIn
 from db.models.user_models import Users
 from schemas.rbac_schemas import ActiveRoleResponse
 from core.enums import RolesEnum
-from services.auth_services import login_endpoint, register_endpoint, me, set_role_endpoint
+from services.auth.auth_services import login_endpoint, register_endpoint, me
+from services.rbac.roles_services import set_role_endpoint
 from app.auth.security import Token, authenticate_user, authenticate_role
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
@@ -16,7 +17,7 @@ auth_router = APIRouter(prefix="/auth", tags=["auth"])
 
 @auth_router.post("/register", status_code=201, response_model=UserCreatedResponse)
 def register(user: UserRegister, roles: List[RolesEnum] = Query(), session: Session = Depends(get_session)):
-    response = register_endpoint(user=user, roles=roles, session=session)
+    response = register_endpoint(new_user=user, requested_roles=roles, session=session)
     return UserCreatedResponse.model_validate(response)
 
 
