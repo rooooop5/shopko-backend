@@ -4,6 +4,7 @@ from schemas.user_schemas import UserBase
 
 if TYPE_CHECKING:
     from db.models.rbac_models import Roles
+    from db.models.product_model import Products
 
 
 class UsersRoles(SQLModel, table=True):
@@ -14,3 +15,4 @@ class UsersRoles(SQLModel, table=True):
 class Users(UserBase, table=True):
     id: Annotated[int, Field(primary_key=True)]
     roles: List["Roles"] = Relationship(back_populates="users", link_model=UsersRoles)
+    products: List["Products"] = Relationship(back_populates="seller")

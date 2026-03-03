@@ -1,5 +1,8 @@
 from sqlmodel import SQLModel, create_engine, Session
 from settings.settings import Settings
+from db.models.product_model import Products
+from db.models.rbac_models import Permissions, RolePermissions, Roles
+from db.models.user_models import Users, UsersRoles
 
 # -----url of the database from the .env through the Settings object------
 url = Settings.DATABASE_URL
