@@ -11,7 +11,7 @@ class UserBase(SQLModel):
 
     @field_validator("email")
     @classmethod
-    def validate_email(cls,instance:str):
+    def validate_email(cls, instance: str):
         if not instance.endswith("@gmail.com"):
             raise ValueError
         return instance

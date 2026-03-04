@@ -75,4 +75,4 @@ def authenticate_role(token=Depends(oauth2_scheme)):
             raise credentials_exception
     except InvalidTokenError:
         raise credentials_exception
-    return {"active_role": role}
+    return {"user":username,"active_role": role}

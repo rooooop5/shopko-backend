@@ -5,7 +5,7 @@ from db.models.user_models import Users
 from core.enums import RolesEnum
 from app.auth.password_utils import hash_password
 from app.auth.security import create_access_token, verify_login_request, verify_role
-from services.rbac.roles_services import get_all_roles,create_user_roles
+from services.rbac.roles_services import get_all_roles, create_user_roles
 
 
 def login(user: OAuth2PasswordRequestForm, session: Session):
@@ -15,7 +15,7 @@ def login(user: OAuth2PasswordRequestForm, session: Session):
 
 
 def me(db_user: Users):
-    roles=get_all_roles(db_user)
+    roles = get_all_roles(db_user)
     response = {"username": db_user.username, "email": db_user.email, "roles": roles}
     return response
 
@@ -25,12 +25,9 @@ def register(new_user: UserRegister, requested_roles: list[RolesEnum], session: 
     db_user = Users(**new_user.model_dump())
     session.add(db_user)
     session.flush()
-    db_user_roles=create_user_roles(db_user=db_user,roles=requested_roles,session=session)
+    db_user_roles = create_user_roles(db_user=db_user, roles=requested_roles, session=session)
     session.add_all(db_user_roles)
     session.flush()
     session.refresh(db_user)
     response = {"username": db_user.username, "email": db_user.email}
     return response
-
-
-
