@@ -17,8 +17,7 @@ async def life(app: FastAPI):
     cleanup()
 
 
-app = FastAPI(lifespan=life)
-
+app = FastAPI(lifespan=life,debug=True)
 
 app.include_router(auth_router)
 app.include_router(roles_router)

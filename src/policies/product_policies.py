@@ -6,7 +6,7 @@ from db.models.product_model import Products
 
 
 class ProductPolicy:
-    def __init__(self, user, active_role: RolesEnum, product: Products, session: Session):
+    def __init__(self, user: Users, active_role: RolesEnum, product: Products, session: Session):
         self.user = user
         self.active_role = active_role
         self.product = product
@@ -22,6 +22,11 @@ class ProductPolicy:
         return permissions
 
     def can_list(self):
-        if PermissionsEnum.viewOrder.value in self.role_permissions:
+        if PermissionsEnum.listProduct.value in self.role_permissions:
             return True
         return False
+
+    def can_view(self):
+        if PermissionsEnum.viewOrder.value in self.role_permissions:
+            return True
+        return True

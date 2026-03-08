@@ -7,9 +7,9 @@ from schemas.user_schemas import UserRegister, UserCreatedResponse, UserLoggedIn
 from db.models.user_models import Users
 from schemas.rbac_schemas import ActiveRoleResponse
 from core.enums import RolesEnum
-from services.auth.auth_services import login, register, me
-from services.rbac.roles_services import set_role
-from services.rbac.permissions_services import get_active_permissions
+from services.auth_services import login, register, me
+from services.roles_services import set_role
+from services.permissions_services import get_active_permissions
 from app.auth.security import Token, authenticate_user, authenticate_role
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])

@@ -1,6 +1,6 @@
 from sqlmodel import Session
 from policies.product_policies import ProductPolicy
-from services.rbac.roles_services import fetch_user_and_role
+from services.roles_services import fetch_user_and_role
 from db.models.product_model import Products
 from db.models.user_models import Users
 from schemas.product_schemas import ProductRegister

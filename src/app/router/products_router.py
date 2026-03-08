@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from app.auth.security import get_session, authenticate_role
-from services.products.products_services import list_product
+from services.products_services import list_product
 from db.models.product_model import Products
 from schemas.product_schemas import ProductRegister
 products_router = APIRouter(prefix="/products", tags=["products"])

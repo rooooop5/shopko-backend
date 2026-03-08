@@ -5,8 +5,8 @@ from app.auth.security import Token,authenticate_role,authenticate_user
 from core.enums import RolesEnum
 from db.models.user_models import Users
 from db.seeds.seed_tables import get_session
-from services.rbac.roles_services import set_role
-from services.rbac.permissions_services import get_active_permissions
+from services.roles_services import set_role
+from services.permissions_services import get_active_permissions
 roles_router=APIRouter(prefix="/role",tags=["role"])
 
 

@@ -5,7 +5,7 @@ from db.models.user_models import Users
 from core.enums import RolesEnum
 from app.auth.password_utils import hash_password
 from app.auth.security import create_access_token, verify_login_request, verify_role
-from services.rbac.roles_services import get_all_roles, create_user_roles
+from services.roles_services import get_all_roles, create_user_roles
 
 
 def login(user: OAuth2PasswordRequestForm, session: Session):
